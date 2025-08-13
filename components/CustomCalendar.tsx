@@ -34,7 +34,6 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ markedDates, style }) =
         dotColor: '#357ae8',
       }}
       style={[styles.calendar, style]}
-      markingType={'custom'}
     />
   );
 };

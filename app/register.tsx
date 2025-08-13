@@ -167,6 +167,9 @@ export default function RegisterScreen() {
         secureTextEntry={true}
         placeholderTextColor="#7da6e3"
       />
+      <Text style={{ color: '#357ae8', fontSize: 13, marginBottom: 4 }}>
+        La contraseña debe tener mínimo 6 caracteres.
+      </Text>
       {/* Botón para registrar */}
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrarse</Text>

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { db, auth } from '../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { LineChart } from 'react-native-chart-kit';
+import ExerciseLineChart from '../components/charts/ExerciseLineChart';
 import { Stack, useRouter } from 'expo-router';
 
 // Ocultar el header en StadisticsPage
@@ -137,7 +137,8 @@ export default function StadisticsPage() {
               {sessions.map((session, idx) => (
                 <View key={idx} style={styles.sessionBox}>
                   <TouchableOpacity onPress={() => setExpandedSession(expandedSession === idx ? null : idx)}>
-                    <Text style={styles.sessionDate}>Nombre: {session.name || 'Sin nombre'} | Fecha: {session.date.split('T')[0]}</Text>
+                    <Text style={styles.sessionName}>{session.name || 'Sin nombre'}</Text>
+                    <Text style={styles.sessionDate}>{session.date.split('T')[0]}</Text>
                   </TouchableOpacity>
                   {/* Si la sesión está expandida, muestra los gráficos de cada ejercicio */}
                   {expandedSession === idx && routines.find(r => r.id === selectedRoutine)?.exercises.map((exercise, exIdx) => {
@@ -155,29 +156,9 @@ export default function StadisticsPage() {
                       <View key={exIdx} style={styles.exerciseChartBox}>
                         <Text style={styles.exerciseTitle}>{exercise}</Text>
                         {exerciseProgress.length > 0 ? (
-                          <LineChart
-                            data={{
-                              labels: exerciseProgress.map(d => d.date),
-                              datasets: [{ data: exerciseProgress.map(d => d.weight) }],
-                            }}
-                            width={Dimensions.get('window').width - 40}
-                            height={180}
-                            chartConfig={{
-                              backgroundColor: '#fff',
-                              backgroundGradientFrom: '#f7faff',
-                              backgroundGradientTo: '#f7faff',
-                              decimalPlaces: 1,
-                              color: (opacity = 1) => `rgba(53, 122, 232, ${opacity})`,
-                              labelColor: (opacity = 1) => `rgba(53, 122, 232, ${opacity})`,
-                              style: { borderRadius: 16 },
-                              propsForDots: {
-                                r: '4',
-                                strokeWidth: '2',
-                                stroke: '#357ae8',
-                              },
-                            }}
-                            bezier
-                            style={{ marginVertical: 8, borderRadius: 16 }}
+                          <ExerciseLineChart
+                            labels={exerciseProgress.map(d => d.date)}
+                            data={exerciseProgress.map(d => d.weight)}
                           />
                         ) : (
                           <Text>No hay datos para este ejercicio.</Text>
@@ -191,8 +172,7 @@ export default function StadisticsPage() {
           )}
         </View>
       )}
-      {/* Agregar texto de nombre de pantalla arriba */}
-      <Text style={styles.screenName}>Estadísticas</Text>
+  {/* Agregar texto de nombre de pantalla arriba */}
       {/* Botón de volver */}
       <TouchableOpacity style={styles.cancelTextButton} onPress={() => router.push('/(tabs)/RoutinePage')}>
         <Text style={styles.cancelText}>Volver</Text>
@@ -208,6 +188,13 @@ StadisticsPage.options = {
 
 // Estilos para la pantalla de estadísticas
 const styles = StyleSheet.create({
+  sessionName: {
+    color: '#357ae8',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 2,
+    textAlign: 'center',
+  },
   container: {
     flexGrow: 1,
     backgroundColor: '#f7faff',
@@ -373,5 +360,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     // Eliminar subrayado
+  },
+  sessionName: {
+    color: '#357ae8',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 2,
+    textAlign: 'center',
   },
 });

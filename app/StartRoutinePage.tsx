@@ -55,11 +55,15 @@ export default function StartRoutinePage() {
   // Guarda la sesión en Firestore
   const handleSaveSession = async () => {
     if (!routine) return;
+    // Obtener el usuario autenticado correctamente desde el objeto auth exportado
+    const { auth } = require('../services/firebase');
+    const user = auth.currentUser;
     await addDoc(collection(db, 'sessions'), {
       routineId: id,
       date: new Date().toISOString(), // La fecha se guarda bajo el nombre 'date'
       name: sessionName,
       exercises: sessionData,
+      userId: user ? user.uid : null,
     });
     Alert.alert('Sesión registrada', '¡Tu sesión fue guardada exitosamente!');
     router.push('/(tabs)/RoutinePage');

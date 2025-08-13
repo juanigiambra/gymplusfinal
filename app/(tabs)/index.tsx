@@ -31,32 +31,18 @@ export default function HomeScreenPage() {
             const q = query(collection(db, 'sessions'), where('userId', '==', user.uid));
             const querySnapshot = await getDocs(q);
             const dates: any = {};
+            const allSessions: any[] = [];
             // Recorre cada sesión y marca la fecha en el calendario.
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
+                allSessions.push(data);
                 if (data.date) {
                     const dateStr = data.date.split('T')[0];
-                    // Marca la fecha en el calendario con estilos personalizados.
+                    // Prueba de marcado simple: selected y marked
                     dates[dateStr] = {
-                        customStyles: {
-                            container: {
-                                borderWidth: 2,
-                                borderColor: '#357ae8',
-                                borderRadius: 16,
-                                backgroundColor: 'transparent',
-                                width: 32,
-                                height: 32,
-                                alignSelf: 'center',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            },
-                            text: {
-                                color: '#357ae8',
-                                fontWeight: 'bold',
-                            },
-                        },
-                        dotColor: '#357ae8',
+                        selected: true,
                         marked: true,
+                        selectedColor: '#357ae8',
                     };
                 }
             });

@@ -1,11 +1,11 @@
 // Página principal de rutinas del usuario. Permite ver, crear y acceder a rutinas.
 import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, StatusBar as RNStatusBar, FlatList } from 'react-native';
+import { useThemeToggle, getTheme } from '../../hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { db, auth } from '../../services/firebase';
 import { collection, addDoc, getDocs, query, where, doc, deleteDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Swipeable } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 
 export const options = {
@@ -13,6 +13,8 @@ export const options = {
 };
 
 export default function RoutinePage() {
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
   // Estado para las rutinas del usuario
   const [routines, setRoutines] = useState<Array<{ id: string; name: string; description: string; exercises: string[]; days: string[]; userId: string }>>([]);
   // Usuario autenticado actual
@@ -72,9 +74,9 @@ export default function RoutinePage() {
 
   // Renderiza la lista de rutinas y el botón para crear nuevas
   return (
-    <View style={styles.container}>
-      <StatusBar style="dark" />
-      <Text style={styles.pageTitle}>Rutinas</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }] }>
+      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+      <Text style={[styles.pageTitle, { color: colors.primary }]}>Rutinas</Text>
       {routines.length > 0 && (
         <View style={styles.routineList}>
           {/* FlatList para mostrar hasta 3 rutinas y permitir scroll si hay más */}

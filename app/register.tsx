@@ -1,5 +1,6 @@
 // Pantalla de registro de usuario. Permite crear una cuenta y guardar datos extra en Firestore.
 import React, { useState } from 'react';
+import { useThemeToggle, getTheme } from '../hooks/useTheme';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { auth, db } from '../services/firebase';
@@ -75,7 +76,10 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default function RegisterScreen() {
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
   // Estados para los datos del formulario
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
@@ -112,8 +116,8 @@ export default function RegisterScreen() {
 
   // Renderiza la interfaz de registro
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registro</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }] }>
+      <Text style={[styles.title, { color: colors.primary }]}>Registro</Text>
       <TextInput
         style={styles.input}
         placeholder="Nombre"

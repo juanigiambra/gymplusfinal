@@ -1,6 +1,7 @@
 // Componente de perfil de usuario. Permite ver y editar datos personales, y cerrar sesión.
 import * as React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useThemeToggle, getTheme } from '../../hooks/useTheme';
 import { auth, db } from '../../services/firebase';
 import { useRouter } from 'expo-router';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -14,6 +15,8 @@ export const options = {
 };
 
 export default function Profile() {
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
   // Estado para modo edición de datos
   const [editMode, setEditMode] = React.useState(false);
   // Estado para los datos del formulario de edición
@@ -107,12 +110,10 @@ export default function Profile() {
 
   // Renderiza la interfaz de perfil
   return (
-    <View style={styles.container}>
-      <Text style={styles.screenName}>Perfil</Text>
-      {/* Círculo para imagen de perfil */}
+    <View style={[styles.container, { backgroundColor: colors.background }] }>
+      <Text style={[styles.screenName, { color: colors.primary }]}>Perfil</Text>
       <View style={{ alignItems: 'center' }}>
         <ProfileImageEditor profileImage={profileImage} onEdit={handlePickImage} />
-        {/* Espacio extra debajo del lápiz */}
         <View style={{ height: 35 }} />
       </View>
       <UserDataTable
@@ -127,8 +128,7 @@ export default function Profile() {
         onEdit={handleEdit}
         onSave={handleSave}
       />
-      {/* Botón de ver estadísticas eliminado, solo cerrar sesión */}
-      <View style={[styles.rowButtons]}> {/* Menos distancia arriba */}
+      <View style={[styles.rowButtons]}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutButtonText}>Cerrar sesión</Text>
         </TouchableOpacity>

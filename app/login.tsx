@@ -1,5 +1,6 @@
 // Pantalla de inicio de sesión. Permite al usuario ingresar con email y contraseña.
 import React, { useState } from 'react';
+import { useThemeToggle, getTheme } from '../hooks/useTheme';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { auth } from '../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -61,11 +62,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export const screenOptions = {
-  headerShown: false,
-};
 
 export default function LoginScreen() {
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
   // Estados para email, contraseña y error
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -85,8 +85,8 @@ export default function LoginScreen() {
 
   // Renderiza la interfaz de login
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Iniciar sesión</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }] }>
+      <Text style={[styles.title, { color: colors.primary }]}>Iniciar sesión</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"

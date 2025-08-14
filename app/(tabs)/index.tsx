@@ -5,7 +5,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { db, auth } from '../../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import CustomCalendar from '../../components/CustomCalendar';
+import LastSessionCard from '../../components/LastSessionCard';
 import { useRouter } from 'expo-router';
+import { useThemeToggle, getTheme } from '../../hooks/useTheme';
+import { TouchableOpacity } from 'react-native';
 
 // Componente principal de la pantalla de inicio (Home).
 // Muestra el calendario de sesiones y el nombre del usuario autenticado.
@@ -16,6 +19,9 @@ export default function HomeScreenPage() {
     const user = auth.currentUser;
     // Hook para navegación entre pantallas.
     const router = useRouter();
+    // Hook para dark mode
+    const { theme, toggleTheme } = useThemeToggle();
+    const colors = getTheme(theme);
 
     // useEffect: verifica autenticación y obtiene las sesiones del usuario desde Firestore.
     useEffect(() => {
@@ -57,10 +63,14 @@ export default function HomeScreenPage() {
 
     // Render principal: muestra el saludo, nombre de pantalla y el calendario personalizado.
     return (
-        <View style={styles.container}>
-            <Text style={styles.pageTitle}>Bienvenido {user?.displayName || user?.email || ''}!</Text>
-            <Text style={styles.screenName}>Inicio</Text>
+        <View style={[styles.container, { backgroundColor: colors.background }]}> 
+            <Text style={[styles.pageTitle, { color: colors.primary }]}>Bienvenido {user?.displayName || user?.email || ''}!</Text>
+            <Text style={[styles.screenName, { color: colors.primary }]}>Inicio</Text>
             <CustomCalendar markedDates={markedDates} />
+            <LastSessionCard />
+            <TouchableOpacity style={styles.themeButton} onPress={toggleTheme}>
+                <Text style={[styles.themeButtonText, { color: colors.primary }]}>Modo {theme === 'light' ? 'Oscuro' : 'Claro'}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -70,36 +80,46 @@ export const options = {
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		backgroundColor: '#f7faff',
-	paddingTop: Platform.OS === 'android' ? ((StatusBar.currentHeight || 32) + 25) : 57,
-	},
-	pageTitle: {
-		fontSize: 24,
-		fontWeight: 'bold',
-		color: '#357ae8',
-		textAlign: 'center',
-		marginTop: 8,
-		marginBottom: 18,
-	},
-	screenName: {
-		fontSize: 20,
-		fontWeight: 'bold',
-		color: '#357ae8',
-		marginBottom: 10,
-		textAlign: 'center',
-	},
-	calendar: {
-		marginTop: 12,
-		borderRadius: 12,
-		width: 340,
-		elevation: 2,
-		shadowColor: '#357ae8',
-		shadowOpacity: 0.08,
-		shadowRadius: 8,
-		backgroundColor: '#fff',
-	},
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        paddingTop: Platform.OS === 'android' ? ((StatusBar.currentHeight || 32) + 25) : 57,
+    },
+    pageTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 8,
+        marginBottom: 18,
+    },
+    screenName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    calendar: {
+        marginTop: 12,
+        borderRadius: 12,
+        width: '92%',
+        elevation: 2,
+        shadowColor: '#357ae8',
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+    },
+    themeButton: {
+        alignSelf: 'center',
+        marginTop: 18,
+        marginBottom: 18,
+        paddingVertical: 10,
+        paddingHorizontal: 24,
+        borderRadius: 8,
+        backgroundColor: 'transparent',
+    },
+    themeButtonText: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        textAlign: 'center',
+    },
 });

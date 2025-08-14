@@ -1,5 +1,6 @@
 // Página de estadísticas. Lista las sesiones y expande el gráfico de cada ejercicio al tocar una sesión.
 import React, { useState, useEffect } from 'react';
+import { useThemeToggle, getTheme } from '../hooks/useTheme';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { db, auth } from '../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -12,6 +13,8 @@ export const options = {
 };
 
 export default function StadisticsPage() {
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
   const router = useRouter();
   // Estado para las rutinas del usuario
   const [routines, setRoutines] = useState<Array<{ id: string; name: string; description: string; exercises: string[] }>>([]);
@@ -81,9 +84,9 @@ export default function StadisticsPage() {
 
   // Renderiza la interfaz de selección de rutina y lista las sesiones
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Estadísticas de entrenamiento</Text>
-      <Text style={styles.label}>Selecciona una rutina:</Text>
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.background }] }>
+      <Text style={[styles.title, { color: colors.primary }]}>Estadísticas de entrenamiento</Text>
+      <Text style={[styles.label, { color: colors.primary }]}>Selecciona una rutina:</Text>
       {loading ? (
         <Text>Cargando rutinas...</Text>
       ) : (

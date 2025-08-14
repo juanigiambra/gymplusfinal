@@ -1,7 +1,7 @@
 // Layout principal de la app. Maneja la carga de fuentes, splash y navegación según autenticación.
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import '../firebaseConfig';
 import * as SplashScreen from 'expo-splash-screen';
 import { SessionProvider } from '../ctx';
+import { ThemeProvider as AppThemeProvider } from '../hooks/ThemeContext';
 // import { useEffect } from 'react';
 import 'react-native-reanimated';
 
@@ -52,17 +53,19 @@ export default function RootLayout() {
   // Renderiza la navegación principal envuelto en GestureHandlerRootView
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SessionProvider>
-        <Stack>
-          <Stack.Screen name="login" options={{ headerShown: false }} />
-          <Stack.Screen name="register" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="CreateRoutinePage" options={{ headerShown: false }} />
-          <Stack.Screen name="RoutineDetailPage" options={{ headerShown: false }} />
-          <Stack.Screen name="StadisticsPage" options={{ headerShown: false }} />
-          <Stack.Screen name="StartRoutinePage" options={{ headerShown: false }} />
-        </Stack>
-      </SessionProvider>
+      <AppThemeProvider>
+        <SessionProvider>
+          <Stack>
+            <Stack.Screen name="login" options={{ headerShown: false }} />
+            <Stack.Screen name="register" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="CreateRoutinePage" options={{ headerShown: false }} />
+            <Stack.Screen name="RoutineDetailPage" options={{ headerShown: false }} />
+            <Stack.Screen name="StadisticsPage" options={{ headerShown: false }} />
+            <Stack.Screen name="StartRoutinePage" options={{ headerShown: false }} />
+          </Stack>
+        </SessionProvider>
+      </AppThemeProvider>
     </GestureHandlerRootView>
   );
 }

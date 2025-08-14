@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
+import { useThemeToggle, getTheme } from '../../hooks/useTheme';
 import { Pressable } from 'react-native';
 import { Stack } from 'expo-router';
 import { useSession } from '../../ctx';
@@ -18,6 +19,8 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const { user, loading } = useSession();
   const router = useRouter();
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -28,7 +31,17 @@ export default function TabLayout() {
   if (loading) return null;
 
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: theme === 'dark' ? '#aaa' : '#888',
+        tabBarStyle: {
+          backgroundColor: colors.background,
+          borderTopColor: theme === 'dark' ? '#23272f' : '#e0e0e0',
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{

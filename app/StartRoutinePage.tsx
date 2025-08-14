@@ -1,5 +1,6 @@
 // Página para registrar una sesión de rutina. Permite ingresar series, repeticiones y peso por ejercicio.
 import React, { useState, useEffect } from 'react';
+import { useThemeToggle, getTheme } from '../hooks/useTheme';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { db } from '../services/firebase';
@@ -7,6 +8,8 @@ import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 import FontAwesome from '@expo/vector-icons/FontAwesome'; // Import used for back button icon
 
 export default function StartRoutinePage() {
+  const { theme } = useThemeToggle();
+  const colors = getTheme(theme);
   // Obtiene el id de la rutina desde los parámetros de navegación
   const { id } = useLocalSearchParams();
   const router = useRouter();
@@ -70,19 +73,19 @@ export default function StartRoutinePage() {
   };
 
   if (loading) {
-    return <View style={styles.container}><Text>Cargando rutina...</Text></View>;
+    return <View style={[styles.container, { backgroundColor: colors.background }]}><Text style={{ color: colors.primary }}>Cargando rutina...</Text></View>;
   }
 
   // Renderiza la interfaz para registrar la sesión
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.background }] }>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <FontAwesome name="arrow-left" size={22} color="#357ae8" />
+        <FontAwesome name="arrow-left" size={22} color={colors.primary} />
       </TouchableOpacity>
       <View style={styles.card}>
-        <Text style={styles.title}>Registrar sesión de rutina</Text>
-        <Text style={styles.routineName}>{routine?.name}</Text>
-        <Text style={styles.routineDesc}>{routine?.description}</Text>
+        <Text style={[styles.title, { color: colors.primary }]}>Registrar sesión de rutina</Text>
+        <Text style={[styles.routineName, { color: colors.primary }]}>{routine?.name}</Text>
+        <Text style={[styles.routineDesc, { color: colors.text }]}>{routine?.description}</Text>
         {/* Campo para editar el nombre de la sesión */}
         <Text style={styles.label}>Nombre de la sesión:</Text>
         <TextInput

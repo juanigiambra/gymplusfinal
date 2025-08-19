@@ -1,57 +1,96 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
-interface UserDataTableProps {
-  user: { displayName?: string; email?: string };
-  extraData: { edad?: number; objetivo?: string };
-  editMode: boolean;
-  form: { edad?: string; objetivo?: string };
-  setForm: React.Dispatch<React.SetStateAction<{ edad?: string; objetivo?: string }>>;
-  onEdit: () => void;
-  onSave: () => void;
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useRouter } from 'expo-router';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
+interface UserData {
+  displayName?: string;
+  email?: string;
+  edad?: number;
+  peso?: number;
+  altura?: number;
+  objetivo?: string;
 }
 
-export default function UserDataTable({ user, extraData, editMode, form, setForm, onEdit, onSave }: UserDataTableProps) {
+export default function UserDataTable() {
+  const router = useRouter();
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (!user) {
+          setUserData(null);
+          setLoading(false);
+          return;
+        }
+        const db = getFirestore();
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setUserData({
+            displayName: user.displayName || userDoc.data().displayName,
+            email: user.email || userDoc.data().email,
+            edad: userDoc.data().edad,
+            peso: userDoc.data().peso,
+            altura: userDoc.data().altura,
+            objetivo: userDoc.data().objetivo,
+          });
+        } else {
+          setUserData({
+            displayName: user.displayName ?? undefined,
+            email: user.email ?? undefined,
+          });
+        }
+      } catch (e) {
+        setUserData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={[styles.userBox, { alignItems: 'center', justifyContent: 'center', minHeight: 200 }]}> 
+        <ActivityIndicator color="#357ae8" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.userBox}>
       <Text style={styles.userLabel}>Nombre</Text>
-      <Text style={styles.userValue}>{user?.displayName || '-'}</Text>
+      <Text style={styles.userValue}>{userData?.displayName || '-'}</Text>
       <Text style={styles.userLabel}>Email</Text>
-      <Text style={styles.userValue}>{user?.email || '-'}</Text>
-      <Text style={styles.userLabel}>Edad</Text>
-      {editMode ? (
-        <TextInput
-          style={styles.userValue}
-          value={form.edad ?? ''}
-          onChangeText={v => setForm(f => ({ ...f, edad: v }))}
-          keyboardType="numeric"
-          placeholder="Edad"
-        />
-      ) : (
-        <Text style={styles.userValue}>{extraData.edad ?? '-'}</Text>
-      )}
+      <Text style={styles.userValue}>{userData?.email || '-'}</Text>
+      <View style={styles.row}>
+        <View style={{ flex: 1, marginRight: 6 }}>
+          <Text style={styles.userLabel}>Edad</Text>
+          <Text style={styles.userValue}>{userData?.edad ?? '-'}</Text>
+        </View>
+        <View style={{ flex: 1, marginHorizontal: 6 }}>
+          <Text style={styles.userLabel}>Peso (kg)</Text>
+          <Text style={styles.userValue}>{userData?.peso ?? '-'}</Text>
+        </View>
+        <View style={{ flex: 1, marginLeft: 6 }}>
+          <Text style={styles.userLabel}>Altura (cm)</Text>
+          <Text style={styles.userValue}>{userData?.altura ?? '-'}</Text>
+        </View>
+      </View>
       <Text style={styles.userLabel}>Objetivo</Text>
-      {editMode ? (
-        <TextInput
-          style={styles.userValue}
-          value={form.objetivo ?? ''}
-          onChangeText={v => setForm(f => ({ ...f, objetivo: v }))}
-          placeholder="Objetivo"
-        />
-      ) : (
-        <Text style={styles.userValue}>{extraData.objetivo ?? '-'}</Text>
-      )}
-      {/* Botón de editar datos dentro de la tabla */}
-      <View style={{ alignItems: 'center', marginTop: 12 }}>
-        {editMode ? (
-          <TouchableOpacity style={styles.editButton} onPress={onSave}>
-            <Text style={styles.editButtonText}>Guardar</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-            <Text style={styles.editButtonText}>Editar datos</Text>
-          </TouchableOpacity>
-        )}
+      <Text style={styles.userValue}>{userData?.objetivo ?? '-'}</Text>
+  <View style={{ alignItems: 'center' }}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.push('../EditUserDataPage')}>
+          <Text style={styles.editButtonText}>Editar datos</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -68,7 +107,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
-    marginBottom: 24,
+    // marginBottom: 24, // Eliminado para quitar el margen inferior
     alignSelf: 'center',
   },
   userLabel: {
@@ -84,6 +123,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#b3d1ff',
     paddingBottom: 4,
+  },
+  row: {
+    flexDirection: 'row',
+    width: '100%',
+    marginBottom: 8,
   },
   editButton: {
     backgroundColor: '#357ae8',

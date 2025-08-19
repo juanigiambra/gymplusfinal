@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API_URL = 'https://api.api-ninjas.com/v1/exercises';
-const API_KEY = 'Rnqn7lBWtFYmw6dhVxdImmPmj9ZtvqllcHW0ubki'; // Reemplaza por tu clave real
+const API_KEY = 'Rnqn7lBWtFYmw6dhVxdImmPmj9ZtvqllcHW0ubki';
 
 export interface Exercise {
   name: string;

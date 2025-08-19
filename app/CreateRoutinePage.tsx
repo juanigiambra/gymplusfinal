@@ -52,19 +52,12 @@ export default function CreateRoutinePage() {
   };
 
   const handleCreate = async () => {
-    if (days.length > 0) {
+    if (name.trim() && days.length > 0) {
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user?.uid) return;
       const db = getFirestore();
-      let routineName = name.trim();
-      if (!routineName) {
-        const now = new Date();
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        routineName = `Sesion ${day}-${month}`;
-      }
-      const routine: Routine = { name: routineName, description, exercises: selectedExercises, days, userId: user.uid };
+      const routine: Routine = { name, description, exercises: selectedExercises, days, userId: user.uid };
       await addDoc(collection(db, 'routines'), routine);
       setSuccess(true);
       setTimeout(() => {
@@ -152,9 +145,9 @@ export default function CreateRoutinePage() {
             </ScrollView>
           )}
           <TouchableOpacity
-            style={[styles.button, (days.length === 0) && styles.buttonDisabled]}
+            style={[styles.button, (!name.trim() || days.length === 0) && styles.buttonDisabled]}
             onPress={handleCreate}
-            disabled={days.length === 0}
+            disabled={!name.trim() || days.length === 0}
           >
             <Text style={styles.buttonText}>Crear rutina</Text>
           </TouchableOpacity>

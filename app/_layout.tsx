@@ -63,6 +63,7 @@ export default function RootLayout() {
             <Stack.Screen name="RoutineDetailPage" options={{ headerShown: false }} />
             <Stack.Screen name="StadisticsPage" options={{ headerShown: false }} />
             <Stack.Screen name="StartRoutinePage" options={{ headerShown: false }} />
+            <Stack.Screen name="EditUserDataPage" options={{ headerShown: false }} />
           </Stack>
         </SessionProvider>
       </AppThemeProvider>

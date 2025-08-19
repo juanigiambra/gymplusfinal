@@ -61,10 +61,18 @@ export default function StartRoutinePage() {
     // Obtener el usuario autenticado correctamente desde el objeto auth exportado
     const { auth } = require('../services/firebase');
     const user = auth.currentUser;
+    // Si no hay nombre de sesión, usar 'Sesion DD-MM'
+    let name = sessionName;
+    if (!name.trim()) {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      name = `Sesion ${day}-${month}`;
+    }
     await addDoc(collection(db, 'sessions'), {
       routineId: id,
       date: new Date().toISOString(), // La fecha se guarda bajo el nombre 'date'
-      name: sessionName,
+      name,
       exercises: sessionData,
       userId: user ? user.uid : null,
     });

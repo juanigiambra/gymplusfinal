@@ -47,12 +47,23 @@ export default function StartRoutinePage() {
     });
   };
 
+
   // Agrega una nueva serie al ejercicio
   const handleAddSerie = (exercise: string) => {
     setSessionData(prev => ({
       ...prev,
       [exercise]: [...(prev[exercise] || [{ reps: '', weight: '' }]), { reps: '', weight: '' }],
     }));
+  };
+
+  // Elimina una serie de un ejercicio
+  const handleRemoveSerie = (exercise: string, serieIdx: number) => {
+    setSessionData(prev => {
+      const series = prev[exercise] || [];
+      if (series.length <= 1) return prev; // No eliminar si solo hay una
+      const updated = series.filter((_, idx) => idx !== serieIdx);
+      return { ...prev, [exercise]: updated };
+    });
   };
 
   // Guarda la sesión en Firestore
@@ -106,7 +117,7 @@ export default function StartRoutinePage() {
         {routine?.exercises?.map((exercise: string, idx: number) => (
           <View key={idx} style={styles.exerciseRow}>
             <Text style={styles.exerciseName} numberOfLines={1} ellipsizeMode="tail">{exercise}</Text>
-            {(sessionData[exercise] || [{ reps: '', weight: '' }]).map((serie, serieIdx) => (
+            {(sessionData[exercise] || [{ reps: '', weight: '' }]).map((serie, serieIdx, arr) => (
               <View key={serieIdx} style={styles.inputsRow}>
                 <Text style={styles.serieLabel}>Serie: {serieIdx + 1}</Text>
                 <TextInput
@@ -125,6 +136,15 @@ export default function StartRoutinePage() {
                   onChangeText={val => handleInput(exercise, serieIdx, 'weight', val)}
                   placeholderTextColor="#7da6e3"
                 />
+                {/* Mostrar basurero solo desde la segunda serie */}
+                {arr.length > 1 && (
+                  <TouchableOpacity
+                    style={styles.trashButton}
+                    onPress={() => handleRemoveSerie(exercise, serieIdx)}
+                  >
+                    <FontAwesome name="trash" size={20} color="#e74c3c" />
+                  </TouchableOpacity>
+                )}
               </View>
             ))}
             {/* Botón para agregar una nueva serie */}
@@ -272,5 +292,11 @@ const styles = StyleSheet.create({
     zIndex: 10,
     backgroundColor: 'transparent',
     padding: 8,
+  },
+  trashButton: {
+    marginLeft: 8,
+    padding: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

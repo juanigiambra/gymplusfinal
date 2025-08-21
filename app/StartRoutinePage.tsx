@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { db } from '../services/firebase';
 import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 import FontAwesome from '@expo/vector-icons/FontAwesome'; // Import used for back button icon
+import ExerciseSeriesInput from '../components/ExerciseSeriesInput';
 
 export default function StartRoutinePage() {
   const { theme } = useThemeToggle();
@@ -115,43 +116,15 @@ export default function StartRoutinePage() {
         />
         <Text style={styles.label}>Ejercicios:</Text>
         {routine?.exercises?.map((exercise: string, idx: number) => (
-          <View key={idx} style={styles.exerciseRow}>
-            <Text style={styles.exerciseName} numberOfLines={1} ellipsizeMode="tail">{exercise}</Text>
-            {(sessionData[exercise] || [{ reps: '', weight: '' }]).map((serie, serieIdx, arr) => (
-              <View key={serieIdx} style={styles.inputsRow}>
-                <Text style={styles.serieLabel}>Serie: {serieIdx + 1}</Text>
-                <TextInput
-                  style={[styles.input, styles.inputSmall]}
-                  placeholder={`Reps`}
-                  keyboardType="numeric"
-                  value={serie.reps}
-                  onChangeText={val => handleInput(exercise, serieIdx, 'reps', val)}
-                  placeholderTextColor="#7da6e3"
-                />
-                <TextInput
-                  style={[styles.input, styles.inputSmall]}
-                  placeholder={`Peso`}
-                  keyboardType="numeric"
-                  value={serie.weight}
-                  onChangeText={val => handleInput(exercise, serieIdx, 'weight', val)}
-                  placeholderTextColor="#7da6e3"
-                />
-                {/* Mostrar basurero solo desde la segunda serie */}
-                {arr.length > 1 && (
-                  <TouchableOpacity
-                    style={styles.trashButton}
-                    onPress={() => handleRemoveSerie(exercise, serieIdx)}
-                  >
-                    <FontAwesome name="trash" size={20} color="#e74c3c" />
-                  </TouchableOpacity>
-                )}
-              </View>
-            ))}
-            {/* Botón para agregar una nueva serie */}
-            <TouchableOpacity style={styles.addSerieButton} onPress={() => handleAddSerie(exercise)}>
-              <Text style={styles.addSerieButtonText}>+ Agregar serie</Text>
-            </TouchableOpacity>
-          </View>
+          <ExerciseSeriesInput
+            key={idx}
+            exercise={exercise}
+            series={sessionData[exercise] || [{ reps: '', weight: '' }]}
+            onInputChange={(serieIdx, field, value) => handleInput(exercise, serieIdx, field, value)}
+            onAddSerie={() => handleAddSerie(exercise)}
+            onRemoveSerie={serieIdx => handleRemoveSerie(exercise, serieIdx)}
+            colors={colors}
+          />
         ))}
         {/* Botón para guardar la sesión */}
         <TouchableOpacity style={styles.saveButton} onPress={handleSaveSession}>

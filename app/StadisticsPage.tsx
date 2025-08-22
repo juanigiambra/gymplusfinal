@@ -1,6 +1,6 @@
 // Página de estadísticas. Lista las sesiones y expande el gráfico de cada ejercicio al tocar una sesión.
 import React, { useState, useEffect } from 'react';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../hooks';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { db, auth } from '../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -363,12 +363,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     // Eliminar subrayado
-  },
-  sessionName: {
-    color: '#357ae8',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 2,
-    textAlign: 'center',
   },
 });

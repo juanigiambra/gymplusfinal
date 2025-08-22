@@ -1,7 +1,4 @@
-import { useColorScheme } from 'react-native';
-import { useContext } from 'react';
-import { useThemeContext } from './ThemeContext';
-
+// Definición de tipos y constantes para el tema
 export type ThemeType = 'light' | 'dark';
 
 export const lightTheme = {
@@ -22,12 +19,6 @@ export const darkTheme = {
   error: '#e83535',
 };
 
-export function useThemeToggle() {
-  const { theme, setTheme } = useThemeContext();
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
-  return { theme, toggleTheme };
-}
-
-export function getTheme(theme: ThemeType) {
+export const getTheme = (theme: ThemeType) => {
   return theme === 'dark' ? darkTheme : lightTheme;
-}
+};

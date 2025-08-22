@@ -1,14 +1,14 @@
 // Componente de perfil de usuario. Permite ver y editar datos personales, y cerrar sesión.
 import * as React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useThemeToggle, getTheme } from '../../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../../hooks';
 import { auth, db } from '../../services/firebase';
 import { useRouter } from 'expo-router';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import UserDataTable from '../../components/UserDataTable';
-import ProfileImageEditor from '../../components/ProfileImageEditor';
+import UserDataTable from '../../components/profile/UserDataTable';
+import ProfileImageEditor from '../../components/profile/ProfileImageEditor';
 
 export const options = {
   headerShown: false,
@@ -66,7 +66,7 @@ export default function Profile() {
   // Cierra la sesión y redirige al login
   const handleLogout = async () => {
     await auth.signOut();
-    router.push('/login');
+    router.push('/(auth)/login');
   };
 
   // Activa modo edición

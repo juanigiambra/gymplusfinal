@@ -1,7 +1,7 @@
 // Página de detalle de rutina. Muestra información de la rutina seleccionada solo si pertenece al usuario.
 import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../hooks';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -173,13 +173,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     width: '100%',
-  },
-  exerciseItemBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-    width: '100%',
-    justifyContent: 'center',
   },
   backButton: {},
   backTextButton: {

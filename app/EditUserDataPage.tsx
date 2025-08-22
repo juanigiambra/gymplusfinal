@@ -7,7 +7,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator,
 import { useRouter } from 'expo-router';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../hooks';
 
 export default function EditUserDataPage() {
   const router = useRouter();

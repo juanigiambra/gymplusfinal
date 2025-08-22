@@ -1,12 +1,12 @@
 // Página para registrar una sesión de rutina. Permite ingresar series, repeticiones y peso por ejercicio.
 import React, { useState, useEffect } from 'react';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../hooks';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { db } from '../services/firebase';
 import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 import FontAwesome from '@expo/vector-icons/FontAwesome'; // Import used for back button icon
-import ExerciseSeriesInput from '../components/ExerciseSeriesInput';
+import ExerciseSeriesInput from '../components/routines/ExerciseSeriesInput';
 
 export default function StartRoutinePage() {
   const { theme } = useThemeToggle();

@@ -1,7 +1,7 @@
 // Página para crear una nueva rutina. Muestra el formulario y confirma éxito.
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from 'react-native';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../hooks';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { Routine } from '../types/routine';

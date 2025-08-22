@@ -1,11 +1,10 @@
 // Pantalla de inicio de sesión. Permite al usuario ingresar con email y contraseña.
 import React, { useState } from 'react';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle } from '../../hooks';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { auth } from '../services/firebase';
+import { auth } from '../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'expo-router';
-import '../firebaseConfig';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,8 +63,7 @@ const styles = StyleSheet.create({
 
 
 export default function LoginScreen() {
-  const { theme } = useThemeToggle();
-  const colors = getTheme(theme);
+  const { theme, colors } = useThemeToggle();
   // Estados para email, contraseña y error
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -108,7 +106,7 @@ export default function LoginScreen() {
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
       {/* Botón para ir a registro */}
-      <TouchableOpacity style={styles.link} onPress={() => router.push('/register')}>
+      <TouchableOpacity style={styles.link} onPress={() => router.push('/(auth)/register')}>
         <Text style={styles.linkText}>Registrarse</Text>
       </TouchableOpacity>
       {/* Muestra error si existe */}

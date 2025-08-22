@@ -4,10 +4,10 @@ import { StatusBar, Platform } from 'react-native';
 import { View, Text, StyleSheet } from 'react-native';
 import { db, auth } from '../../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import CustomCalendar from '../../components/CustomCalendar';
-import LastSessionCard from '../../components/LastSessionCard';
+import CustomCalendar from '../../components/ui/CustomCalendar';
+import LastSessionCard from '../../components/cards/LastSessionCard';
 import { useRouter } from 'expo-router';
-import { useThemeToggle, getTheme } from '../../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../../hooks';
 import { TouchableOpacity } from 'react-native';
 
 // Componente principal de la pantalla de inicio (Home).
@@ -27,7 +27,7 @@ export default function HomeScreenPage() {
     useEffect(() => {
         // Si no hay usuario autenticado, redirige al login.
         if (!auth.currentUser) {
-            router.push('/login');
+            router.push('/(auth)/login');
             return;
         }
         // Función asincrónica para obtener las sesiones del usuario desde Firestore.

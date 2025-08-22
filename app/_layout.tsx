@@ -6,10 +6,9 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useState, useEffect } from 'react';
-import '../firebaseConfig';
 import * as SplashScreen from 'expo-splash-screen';
 import { SessionProvider } from '../ctx';
-import { ThemeProvider as AppThemeProvider } from '../hooks/ThemeContext';
+import { ThemeProvider } from '../hooks';
 // import { useEffect } from 'react';
 import 'react-native-reanimated';
 
@@ -53,7 +52,7 @@ export default function RootLayout() {
   // Renderiza la navegación principal envuelto en GestureHandlerRootView
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppThemeProvider>
+      <ThemeProvider>
         <SessionProvider>
           <Stack>
             <Stack.Screen name="login" options={{ headerShown: false }} />
@@ -66,7 +65,7 @@ export default function RootLayout() {
             <Stack.Screen name="EditUserDataPage" options={{ headerShown: false }} />
           </Stack>
         </SessionProvider>
-      </AppThemeProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

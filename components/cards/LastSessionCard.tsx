@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { db, auth } from '../services/firebase';
+import { db, auth } from '../../services/firebase';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 

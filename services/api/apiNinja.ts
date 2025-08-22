@@ -1,8 +1,8 @@
 // Servicio centralizado para la integración con API Ninja
 import axios from 'axios';
+import { API_NINJA_CONFIG } from '../../config';
 
-const API_URL = 'https://api.api-ninjas.com/v1/exercises';
-const API_KEY = 'Rnqn7lBWtFYmw6dhVxdImmPmj9ZtvqllcHW0ubki';
+const { API_URL, API_KEY } = API_NINJA_CONFIG;
 
 export interface Exercise {
   name: string;

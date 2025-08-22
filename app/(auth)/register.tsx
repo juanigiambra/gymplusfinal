@@ -1,13 +1,12 @@
 // Pantalla de registro de usuario. Permite crear una cuenta y guardar datos extra en Firestore.
 import React, { useState } from 'react';
-import { useThemeToggle, getTheme } from '../hooks/useTheme';
+import { useThemeToggle } from '../../hooks';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { auth, db } from '../services/firebase';
+import { auth, db } from '../../services/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
-import '../firebaseConfig';
 
 const styles = StyleSheet.create({
   container: {
@@ -78,8 +77,7 @@ const styles = StyleSheet.create({
 
 
 export default function RegisterScreen() {
-  const { theme } = useThemeToggle();
-  const colors = getTheme(theme);
+  const { theme, colors } = useThemeToggle();
   // Estados para los datos del formulario
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
@@ -181,7 +179,7 @@ export default function RegisterScreen() {
       {/* Muestra error si existe */}
       {error && <Text style={styles.error}>{error}</Text>}
       {/* Botón para volver al login */}
-      <TouchableOpacity style={styles.link} onPress={() => router.push('/login')}>
+      <TouchableOpacity style={styles.link} onPress={() => router.push('/(auth)/login')}>
         <Text style={styles.linkText}>Volver al login</Text>
       </TouchableOpacity>
     </View>

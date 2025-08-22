@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
-import { ThemeType, lightTheme, darkTheme } from './useTheme';
+import { ThemeType } from './ThemeConstants';
 
 interface ThemeContextProps {
   theme: ThemeType;

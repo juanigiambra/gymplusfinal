@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { db, auth } from '../services/firebase';
+import { db, auth } from '../../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 const LastRoutineCard: React.FC = () => {

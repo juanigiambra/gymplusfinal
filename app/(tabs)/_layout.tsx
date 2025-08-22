@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { useThemeToggle, getTheme } from '../../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../../hooks';
 import { Pressable } from 'react-native';
 import { Stack } from 'expo-router';
 import { useSession } from '../../ctx';

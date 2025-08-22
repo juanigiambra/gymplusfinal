@@ -1,7 +1,7 @@
 // Página principal de rutinas del usuario. Permite ver, crear y acceder a rutinas.
 import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, StatusBar as RNStatusBar, FlatList } from 'react-native';
-import { useThemeToggle, getTheme } from '../../hooks/useTheme';
+import { useThemeToggle, getTheme } from '../../hooks';
 import { useRouter } from 'expo-router';
 import { db, auth } from '../../services/firebase';
 import { collection, addDoc, getDocs, query, where, doc, deleteDoc } from 'firebase/firestore';
